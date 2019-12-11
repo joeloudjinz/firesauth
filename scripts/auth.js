@@ -1,21 +1,19 @@
-// Getting data
-db.collection('guides')
-    .get()
-    .then((snapshot) => {
-        setupGuides(snapshot.docs)
-    }).catch((error) => {
-        console.log('error while fetching guides, ', error);
-    });
-
 // Listening to auth status changes
 auth.onAuthStateChanged(user => {
     // when the user value is valid (!= null) means that the user has just logged or signed in
     if (user) {
-        console.log('good by');
+        // Getting data
+        db.collection('guides')
+            .get()
+            .then((snapshot) => {
+                setupGuides(snapshot.docs)
+            }).catch((error) => {
+                console.log('error while fetching guides, ', error);
+            });
         return;
     }
     // else means has just logged out
-    console.log('hello');
+    setupGuides([]);
 });
 
 // Registration
