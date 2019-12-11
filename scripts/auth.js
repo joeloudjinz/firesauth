@@ -1,3 +1,4 @@
+// Registration
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -13,4 +14,11 @@ signupForm.addEventListener('submit', (event) => {
         }).catch((error) => {
             console.log('error :', error);
         });
+});
+
+// Logout
+const logoutBtn = document.querySelector('#logout');
+logoutBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    auth.signOut();
 });
