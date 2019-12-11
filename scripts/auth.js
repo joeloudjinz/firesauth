@@ -18,6 +18,27 @@ auth.onAuthStateChanged(user => {
     setupGuides([]);
 });
 
+// Creating guide
+const createForm = document.querySelector('#create-form');
+createForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const title = createForm['title'].value;
+    const content = createForm['content'].value;
+
+    db.collection('guides').add({
+        title,
+        content
+    }).then((result) => {
+        const modal = document.querySelector('#modal-create');
+        M.Modal.getInstance(modal).close();
+        createForm.reset();
+        console.log('guide inserted, ', result);
+    }).catch((error) => {
+        console.log('error while inserting guide, ', error);
+    });;
+});
+
 // Registration
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (event) => {
