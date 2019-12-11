@@ -1,3 +1,14 @@
+// Listening to auth status changes
+auth.onAuthStateChanged(user => {
+    // when the user value is valid (!= null) means that the user has just logged or signed in
+    if (user) {
+        console.log('good by');
+        return;
+    }
+    // else means has just logged out
+    console.log('hello');
+});
+
 // Registration
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (event) => {
