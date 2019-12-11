@@ -10,9 +10,11 @@ auth.onAuthStateChanged(user => {
             }).catch((error) => {
                 console.log('error while fetching guides, ', error);
             });
+        setupUI(user);
         return;
     }
     // else means has just logged out
+    setupUI();
     setupGuides([]);
 });
 
