@@ -3,13 +3,9 @@ auth.onAuthStateChanged(user => {
     // when the user value is valid (!= null) means that the user has just logged or signed in
     if (user) {
         // Getting data
-        db.collection('guides')
-            .get()
-            .then((snapshot) => {
-                setupGuides(snapshot.docs)
-            }).catch((error) => {
-                console.log('error while fetching guides, ', error);
-            });
+        db.collection('guides').onSnapshot(snapshot => {
+            setupGuides(snapshot.docs)
+        });
         setupUI(user);
         return;
     }
@@ -26,17 +22,20 @@ createForm.addEventListener('submit', (event) => {
     const title = createForm['title'].value;
     const content = createForm['content'].value;
 
-    db.collection('guides').add({
-        title,
-        content
-    }).then((result) => {
-        const modal = document.querySelector('#modal-create');
-        M.Modal.getInstance(modal).close();
-        createForm.reset();
-        console.log('guide inserted, ', result);
-    }).catch((error) => {
-        console.log('error while inserting guide, ', error);
-    });;
+    db.collection('guides')
+        .add({
+            title,
+            content
+        })
+        .then((result) => {
+            const modal = document.querySelector('#modal-create');
+            M.Modal.getInstance(modal).close();
+            createForm.reset();
+            console.log('guide inserted, ', result);
+        })
+        .catch((error) => {
+            console.log('error while inserting guide, ', error);
+        });;
 });
 
 // Registration
