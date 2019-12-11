@@ -1,3 +1,12 @@
+// Getting data
+db.collection('guides')
+    .get()
+    .then((snapshot) => {
+        setupGuides(snapshot.docs)
+    }).catch((error) => {
+        console.log('error while fetching guides, ', error);
+    });
+
 // Listening to auth status changes
 auth.onAuthStateChanged(user => {
     // when the user value is valid (!= null) means that the user has just logged or signed in
