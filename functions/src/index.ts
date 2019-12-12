@@ -10,10 +10,18 @@ import * as functions from "firebase-functions";
 import { initializeApp, auth } from "firebase-admin";
 
 initializeApp();
-// onCall() means it going to be called from the frontend
-// data holds the information sent with the call to this cloud function
-//  context holds data about authentication of the user that make the call of this cloud function
+// 'onCall()' means it going to be called from the frontend
+// 'data' holds the information sent with the call to this cloud function
+// 'context' holds data about authentication (and more) of the user that made
+// the call of this cloud function
 exports.addAdminRole = functions.https.onCall((data, context) => {
+  // context.auth holds the authentication object
+  if (context.auth && !context.auth.token.admin) {
+    return {
+      error: "Only admins can add new admins, sucker"
+    };
+  }
+
   // get the user
   return auth()
     .getUserByEmail(data.email)
