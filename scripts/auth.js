@@ -1,3 +1,21 @@
+// Add admin cloud function
+const adminForm = document.querySelector('.admin-actions');
+adminForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const adminEmail = document.querySelector('#admin-email').value;
+    // getting a reference to the cloud function
+    const addAdminRole = functions.httpsCallable('addAdminRole');
+    // calling the cloud function
+    addAdminRole({
+            email: adminEmail
+        })
+        .then(result => {
+            console.log('add admin role result: ', result);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+});
 // Listening to auth status changes
 auth.onAuthStateChanged(user => {
     // when the user value is valid (!= null) means that the user has just logged or signed in
