@@ -2,11 +2,43 @@
 auth.onAuthStateChanged(user => {
     // when the user value is valid (!= null) means that the user has just logged or signed in
     if (user) {
-        console.log('good by');
+        // Getting data
+        db.collection('guides')
+            .onSnapshot(snapshot => {
+                setupGuides(snapshot.docs)
+            }, error => {
+                console.log(error.message);
+            });
+        setupUI(user);
         return;
     }
     // else means has just logged out
-    console.log('hello');
+    setupUI();
+    setupGuides([]);
+});
+
+// Creating guide
+const createForm = document.querySelector('#create-form');
+createForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const title = createForm['title'].value;
+    const content = createForm['content'].value;
+
+    db.collection('guides')
+        .add({
+            title,
+            content
+        })
+        .then((result) => {
+            const modal = document.querySelector('#modal-create');
+            M.Modal.getInstance(modal).close();
+            createForm.reset();
+            console.log('guide inserted, ', result);
+        })
+        .catch((error) => {
+            console.log('error while inserting guide, ', error);
+        });;
 });
 
 // Registration
@@ -19,6 +51,12 @@ signupForm.addEventListener('submit', (event) => {
 
     auth.createUserWithEmailAndPassword(email, password)
         .then((credentials) => {
+            return db.collection('users')
+                .doc(credentials.user.uid)
+                .set({
+                    bio: signupForm['signup-bio'].value
+                });
+        }).then(() => {
             const modal = document.querySelector('#modal-signup');
             M.Modal.getInstance(modal).close();
             signupForm.reset();
