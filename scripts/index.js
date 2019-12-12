@@ -8,6 +8,14 @@ const setupUI = (user) => {
     loggedInLinks.forEach(element => element.style.display = 'block');
     loggedOutLinks.forEach(element => element.style.display = 'none');
     accountDetails.innerHTML = `<div> Logged in as ${user.email} </div>`;
+    db.collection('users')
+      .doc(user.uid)
+      .get()
+      .then((result) => {
+        accountDetails.innerHTML += `<div> Bio: ${result.data().bio} </div>`;
+      }).catch((err) => {
+        console.log(error);
+      });
     return;
   }
 

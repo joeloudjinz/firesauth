@@ -3,9 +3,12 @@ auth.onAuthStateChanged(user => {
     // when the user value is valid (!= null) means that the user has just logged or signed in
     if (user) {
         // Getting data
-        db.collection('guides').onSnapshot(snapshot => {
-            setupGuides(snapshot.docs)
-        });
+        db.collection('guides')
+            .onSnapshot(snapshot => {
+                setupGuides(snapshot.docs)
+            }, error => {
+                console.log(error);
+            });
         setupUI(user);
         return;
     }
@@ -48,6 +51,12 @@ signupForm.addEventListener('submit', (event) => {
 
     auth.createUserWithEmailAndPassword(email, password)
         .then((credentials) => {
+            return db.collection('users')
+                .doc(credentials.user.uid)
+                .set({
+                    bio: signupForm['signup-bio'].value
+                });
+        }).then(() => {
             const modal = document.querySelector('#modal-signup');
             M.Modal.getInstance(modal).close();
             signupForm.reset();
