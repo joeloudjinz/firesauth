@@ -20,6 +20,16 @@ adminForm.addEventListener('submit', (event) => {
 auth.onAuthStateChanged(user => {
     // when the user value is valid (!= null) means that the user has just logged or signed in
     if (user) {
+        user.getIdTokenResult()
+            .then(idTokenResult => {
+                // 'idTokenResult' holds all information about the token in general
+                // 'idTokenResult.claims' holds all information about the claims of the token
+                user.admin = idTokenResult.claims.admin;
+                setupUI(user);
+            })
+            .catch(error => {
+                console.log(error.message);
+            });
         // Getting data
         db.collection('guides')
             .onSnapshot(snapshot => {
@@ -27,7 +37,6 @@ auth.onAuthStateChanged(user => {
             }, error => {
                 console.log(error.message);
             });
-        setupUI(user);
         return;
     }
     // else means has just logged out
