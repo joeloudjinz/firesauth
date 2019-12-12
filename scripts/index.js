@@ -13,7 +13,7 @@ const setupUI = (user) => {
       .get()
       .then((result) => {
         accountDetails.innerHTML += `<div> Bio: ${result.data().bio} </div>`;
-      }).catch((err) => {
+      }).catch((error) => {
         console.log(error);
       });
     return;

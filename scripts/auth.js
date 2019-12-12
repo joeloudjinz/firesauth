@@ -7,7 +7,7 @@ auth.onAuthStateChanged(user => {
             .onSnapshot(snapshot => {
                 setupGuides(snapshot.docs)
             }, error => {
-                console.log(error);
+                console.log(error.message);
             });
         setupUI(user);
         return;
